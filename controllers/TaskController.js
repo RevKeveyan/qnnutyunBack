@@ -50,6 +50,7 @@ exports.deleteTask = async (req, res) => {
   const taskId = req.params.taskId;
   Task.deleteOne({ _id: taskId })
     .then((deletedPost) => {
+        
       return res.status(200).json({ message: "Task deleted successfully" });
     })
     .catch((error) => {
