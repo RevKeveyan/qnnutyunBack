@@ -11,9 +11,12 @@ const taskSchema = new Schema({
         type:String,
         require:true,
     },
+    userId:{
+        type:String,
+        require:true,
+    },
     assignedUserId:{
         type:String,
-        
     },
     assignedUserName:{
         type:String,
@@ -23,14 +26,6 @@ const taskSchema = new Schema({
         required:true,
         default:"toDo"
     },
-    email:{
-        type:String,
-        require:true,
-    },
-    password:{
-        type:String,
-        require:true,
-    },
     createdAt:{
         type:Date,
         require:true,
@@ -39,10 +34,7 @@ const taskSchema = new Schema({
         type:Date,
         require:true,
     },
-    role:{
-        type:String,
-        require:true,
-    },
+   
   
 });
 
