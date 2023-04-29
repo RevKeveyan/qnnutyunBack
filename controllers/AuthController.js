@@ -78,7 +78,7 @@ exports.signIn = async (req, res) =>{
     const { email, password } = req.body;
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-        return res.status(400).json({message: 'Invalid data', errors})
+        return res.status(400).json({message: 'Invalid data', errors});
     }
     const user = await User.findOne({ email})
         .then(async (user) => {
@@ -106,4 +106,15 @@ exports.getUser = async (req, res) => {
     console.log(error);
     return res.status(401).json({ message: 'Invalid email or password' });
   }
+};
+
+exports.getUsers = async (req, res) => {
+  const users = User.find({});
+  users
+    .then((result) => {
+      res.status(200).json({ result });
+    })
+    .catch((err) => {
+      res.status(400).json({ message: "Posts not found" });
+    });
 };

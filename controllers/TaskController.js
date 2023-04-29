@@ -3,6 +3,7 @@ const { validationResult } = require("express-validator");
 
 exports.newTask = (req, res) => {
   const data = req.body;
+  console.log(data);
   const userId = req.user._doc._id;
   const errors = validationResult(req.body);
   if (!errors.isEmpty()) {
@@ -23,8 +24,8 @@ exports.newTask = (req, res) => {
 };
 
 exports.getAllAdminTasks = (req, res) => {
-  const {userId} = req.params;
-  const task = Task.find({userId});
+  const { userId } = req.params;
+  const task = Task.find({ userId });
   task
     .then((result) => {
       res.status(200).json({ result });
@@ -35,8 +36,8 @@ exports.getAllAdminTasks = (req, res) => {
 };
 
 exports.getUserTasks = (req, res) => {
-  const {assignedUserId} = req.params;
-  const task = Task.find({assignedUserId});
+  const { assignedUserId } = req.params;
+  const task = Task.find({ assignedUserId });
   task
     .then((result) => {
       res.status(200).json({ result });
@@ -46,12 +47,32 @@ exports.getUserTasks = (req, res) => {
     });
 };
 exports.deleteTask = async (req, res) => {
-  const id = req.headers.id;
-  Task.deleteOne({ _id: id })
+  const taskId = req.params.taskId;
+  Task.deleteOne({ _id: taskId })
     .then((deletedPost) => {
-      res.status(200).json({ message: "Task deleted successfully" });
+      return res.status(200).json({ message: "Task deleted successfully" });
     })
     .catch((error) => {
-      res.status(400).json({ message: "Failed to delete post" });
+      return res.status(400).json({ message: "Failed to delete post" });
+    });
+};
+exports.updateTask = (req, res) => {
+  Task.findOne({ _id: req.body._id })
+    .then((task) => {
+      task.status = req.body.status;
+      task.description = req.body.description;
+      task.title = req.body.title;
+      task.assignedUserId = req.body.assignedUserId;
+      task
+        .save()
+        .then((result) => {
+          res.status(200).json({ result });
+        })
+        .catch((err) => {
+          res.status(400).json({ message: "Task update error" });
+        });
+    })
+    .catch((err) => {
+      res.status(400).json({ message: "Task not found" });
     });
 };
